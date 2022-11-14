@@ -14,9 +14,18 @@ public enum MovieSerieStatusEnum {
     ERROR_ENV("409", "No se ha procesado el valor de la variable de entorno", "Ouch, lamentamos que haya ocurrido esto."),
     ERROR_ENV_NOT_CONTENT("404", "No fue encontrado el valor de la variable de entorno", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
     ERROR_SERVICE_OR_OPERATION("404", "No fue encontrado ningún servicio.", "Esperamos estar pronto para ti!"),
+
+    ERROR_PROPERTY_VALUE("404", "El valor de la propiedad no es el esperado.", "Esperamos estar pronto para ti!"),
     ERROR_FORMAT_REQUEST("400", "El formato de la petición no es el esperado.", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
-    ERROR_CONNECT_TMDB("418", "Ha fallado la comunicación con tmdb.", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
-    ERROR_CONNECT_TMDB_FORMAT("404", "Ha fallado parseando la respuesta de tmdb.", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde.");
+
+    ERROR_AMAZON_DB_NOT_RESULT("404", "No se ha encontrado ningún elemento en bd.", "Vuelva a intentar mas tarde."),
+
+    ERROR_AMAZON_DB_FIND_BY_ID("404", "No se ha encontrado ningún elemento en bd (findById).", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
+    ERROR_AMAZON_DB_FIND_ALL("404", "No se ha encontrado ningún elemento en bd (findAll).", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
+    ERROR_AMAZON_DB_SAVE_EXIST("404", "Ya se encuentra registrado ese elemento.", "Algo se nos hace familiar, elemento repetido."),
+    ERROR_AMAZON_DB_SAVE("404", "No se ha registrado el elemento en bd.", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde."),
+    ERROR_AMAZON_DB_UPDATE("404", "No se ha actualizado el elemento en bd.", "Lo sentimos hemos tenido una falla, vuelva a intentar mas tarde.");
+
     private final String code;
     private final String messageBackend;
     private final String messageFrontend;

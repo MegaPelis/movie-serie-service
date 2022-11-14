@@ -1,6 +1,6 @@
 package com.megapelis.service;
 
-import com.megapelis.service.api.abstractfactory.MovieSerieFactory;
+import com.megapelis.service.api.factory.MovieSerieFactory;
 import com.megapelis.service.model.dto.request.generic.Request;
 import com.megapelis.service.model.dto.response.generic.Response;
 

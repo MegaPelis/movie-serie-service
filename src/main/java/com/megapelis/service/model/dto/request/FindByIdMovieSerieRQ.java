@@ -8,17 +8,13 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * Clase {@link SaveMovieSerieRQ}
+ * Clase {@link FindByIdMovieSerieRQ}
  * @author sergio.barrios.
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaveMovieSerieRQ implements Serializable {
-    private String name;
+public class FindByIdMovieSerieRQ implements Serializable {
     private String idTMDB;
-    private String premiereDate;
-    private String image;
-    private String points;
 }

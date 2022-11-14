@@ -15,10 +15,7 @@ public enum MovieSerieOperationEnum {
     FIND_ALL("findAll"),
     SAVE("save"),
     UPDATE("update"),
-    UPDATE_STATUS("updateStatus"),
-
-    MOVIE("movie"),
-    SERIE("serie");
+    UPDATE_STATUS("updateStatus");
 
     private String name;
 

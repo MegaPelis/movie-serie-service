@@ -1,19 +1,21 @@
 package com.megapelis.service.util;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.google.gson.Gson;
 import com.megapelis.service.model.dto.request.generic.Request;
 import com.megapelis.service.model.dto.request.generic.RequestProperty;
+import com.megapelis.service.model.dto.response.FindByIdMovieSerieRS;
 import com.megapelis.service.model.dto.response.generic.Response;
 import com.megapelis.service.model.dto.response.generic.ResponseStatus;
+import com.megapelis.service.model.entity.MovieSerie;
+import com.megapelis.service.model.entity.amazon.AttributeAmazon;
+import com.megapelis.service.model.entity.amazon.QueryAmazon;
 import com.megapelis.service.model.enums.MovieSerieStatusEnum;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +115,7 @@ public class MovieSerieCommon {
      * @return {@link RequestProperty}
      */
     public static RequestProperty getProperty(String key, List<RequestProperty> properties){
-        if(!isList(properties) || isValidString(key))
+        if(!isList(properties) || !isValidString(key))
             return null;
         List<RequestProperty> propertiesNew =  properties.stream().filter(property -> property.getName().equalsIgnoreCase(key)).collect(Collectors.toList());
         if(propertiesNew.isEmpty())
@@ -132,6 +134,36 @@ public class MovieSerieCommon {
     }
 
     /**
+     * Metodo que permite conocer el valor de un atributo.
+     * @param attributes
+     * @param name
+     * @param values
+     * @return {@link String}
+     */
+    public static String getValueAttribute(Map<String, AttributeValue> attributes, String name, String values){
+        if(null == attributes || !isValidString(name, values) || !values.contains(name))
+            return null;
+        AttributeValue attribute = attributes.get(name);
+        if(null == attribute)
+            return null;
+        return attribute.getS();
+    }
+
+    /**
+     * Metodo que permite agregar nuevos atributos.
+     * @param attributesMap
+     * @param attributes
+     * @return {@link Map}
+     */
+    public static Map<String, AttributeValue> addAttributes(Map<String, AttributeValue> attributesMap, AttributeAmazon... attributes){
+        if(null == attributesMap)
+            attributesMap = new HashMap<>();
+        Map<String, AttributeValue> finalAttributesMap = attributesMap;
+        Arrays.stream(attributes).forEach(attribute -> finalAttributesMap.put(attribute.getKey(), attribute.getAttribute()));
+        return finalAttributesMap;
+    }
+
+    /**
      * Metodo que convierte un objeto a clase.
      * @param object
      * @param clazz
@@ -142,6 +174,26 @@ public class MovieSerieCommon {
         Gson gson = new Gson();
         String json = gson.toJson(object);
         return gson.fromJson(json, clazz);
+    }
+
+    /**
+     * Metodo que permite convertir un {@link MovieSerie} a {@link FindByIdMovieSerieRS}
+     * @param movieSerie
+     * @return {@link FindByIdMovieSerieRS}
+     */
+    public static FindByIdMovieSerieRS convertMovieSerieToFindByIdMovieSerieRS(MovieSerie movieSerie){
+        return FindByIdMovieSerieRS.builder()
+                .id(movieSerie.getId())
+                .name(movieSerie.getName())
+                .idTMDB(movieSerie.getIdTMDB())
+                .image(movieSerie.getImage())
+                .points(movieSerie.getPoints())
+                .status(movieSerie.getStatus())
+                .type(movieSerie.getTypeService())
+                .premiereDate(movieSerie.getPremiereDate())
+                .createdDate(movieSerie.getCreatedDate())
+                .lastModifiedDate(movieSerie.getLastModifiedDate())
+                .build();
     }
 
     /**
@@ -159,7 +211,7 @@ public class MovieSerieCommon {
      * @param object
      */
     public static void output(Object object){
-        if(object instanceof Response || object instanceof Request)
+        if(object instanceof Response || object instanceof Request || object instanceof MovieSerie || object instanceof QueryAmazon)
             System.out.println(getStringJSON(object));
         else
             System.out.println(object);

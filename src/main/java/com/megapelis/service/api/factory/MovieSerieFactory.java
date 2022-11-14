@@ -1,15 +1,12 @@
-package com.megapelis.service.api.abstractfactory;
+package com.megapelis.service.api.factory;
 
-import com.megapelis.service.api.abstractfactory.factory.*;
 import com.megapelis.service.api.handler.MovieSerieHandler;
 import com.megapelis.service.api.handler.impl.*;
 import com.megapelis.service.model.dto.request.generic.Request;
-import com.megapelis.service.model.dto.request.generic.RequestProperty;
 import com.megapelis.service.model.dto.response.generic.Response;
 import com.megapelis.service.model.enums.MovieSerieOperationEnum;
 import com.megapelis.service.model.enums.MovieSerieStatusEnum;
 import com.megapelis.service.util.MovieSerieCommon;
-import com.megapelis.service.util.MovieSerieConstant;
 import com.megapelis.service.util.MovieSerieException;
 
 /**
@@ -28,25 +25,25 @@ public class MovieSerieFactory {
      */
     public static Response handler(Request request) {
         MovieSerieCommon.output(request);
-        Response response;
+        Response response = null;
+        MovieSerieHandler handler = null;
         try {
             MovieSerieCommon.isValidRequest(request);
-            RequestProperty property = MovieSerieCommon.getProperty(MovieSerieConstant.STRING_PROPERTY_SERVICE, request.getProperties());
             switch (MovieSerieOperationEnum.isValid(request.getOperation())){
                 case FIND_BY_ID:
-                    response = FindByIdMovieSerieFactory.handler(request, property);
+                    handler = new FindByIdMovieSerieHandler();
                     break;
                 case FIND_ALL:
-                    response = FindAllMovieSerieFactory.handler(request, property);
+                    handler = new FindAllMovieSerieHandler();
                     break;
                 case SAVE:
-                    response = SaveMovieSerieFactory.handler(request, property);
+                    handler = new SaveMovieSerieHandler();
                     break;
                 case UPDATE:
-                    response = UpdateMovieSerieFactory.handler(request, property);
+                    handler = new UpdateMovieSerieHandler();
                     break;
                 case UPDATE_STATUS:
-                    response = UpdateStatusMovieSerieFactory.handler(request, property);
+                    handler = new UpdateStatusMovieSerieHandler();
                     break;
                 default:
                     response =  MovieSerieCommon.buildResponse(request, MovieSerieStatusEnum.ERROR);
@@ -55,6 +52,8 @@ public class MovieSerieFactory {
         } catch (MovieSerieException e) {
             response =  MovieSerieCommon.buildResponse(request, e.getStatus());
         }
+        if(null == response && null != handler)
+            response = handler.execute(request);
         MovieSerieCommon.output(response);
         return response;
     }

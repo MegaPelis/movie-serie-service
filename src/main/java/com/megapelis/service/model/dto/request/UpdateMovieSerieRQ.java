@@ -14,5 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMovieSerieRQ {
-    private String idMovie;
+    private String id;
+    private String name;
+    private String idTMDB;
+    private String premiereDate;
+    private String image;
+    private String points;
 }
